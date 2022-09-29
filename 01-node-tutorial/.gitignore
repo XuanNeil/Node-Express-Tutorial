@@ -1,0 +1,4 @@
+/node_modules
+/content/big.txt
+
+yarn.lock
