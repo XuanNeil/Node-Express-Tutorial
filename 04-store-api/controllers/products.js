@@ -1,9 +1,9 @@
 const Product = require('../models/product');
 
 const getAllProductsStatic = async (req, res) => {
-  const products = await Product.find({ price: { $gt: 30 } })
-    .sort('price')
-    .select('name price');
+  const products = await Product.find({ price: { $gt: 30 } }) // filter price co it nhat la 30
+    .sort('price') // sap xep theo price. Neu -price la sap xep tu lon ve be.
+    .select('name price'); // chon 2 field name, price de return.
 
   res.status(200).json({ products, nbHits: products.length });
 };
@@ -22,17 +22,17 @@ const getAllProducts = async (req, res) => {
   }
   if (numericFilters) {
     const operatorMap = {
-      '>': '$gt',
-      '>=': '$gte',
-      '=': '$eq',
-      '<': '$lt',
-      '<=': '$lte',
+      '>': '$gt', // lon hon
+      '>=': '$gte', // lon hon hoac bang
+      '=': '$eq', // bang
+      '<': '$lt', // nho hon
+      '<=': '$lte', // nho hon hoac bang
     };
     const regEx = /\b(<|>|>=|=|<|<=)\b/g;
     let filters = numericFilters.replace(
       regEx,
       (match) => `-${operatorMap[match]}-`
-    );
+    ); // vd: price-$gt-40, rating-$gte-4
     const options = ['price', 'rating'];
     filters = filters.split(',').forEach((item) => {
       const [field, operator, value] = item.split('-');
